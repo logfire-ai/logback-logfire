@@ -31,9 +31,8 @@ public class LogfireAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     // Customizable variables
     protected String appName;
-//    protected String ingestUrl = "https://in.logfire.ai";
+    protected String ingestUrl = "https://in.logfire.ai";
 
-    protected String ingestUrl = "http://localhost:8888/logfire.sh";
     protected String sourceToken;
     protected String userAgent = "Logfire Logback Appender";
 

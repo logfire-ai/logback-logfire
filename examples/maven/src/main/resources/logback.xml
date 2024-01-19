@@ -1,7 +1,7 @@
 <configuration debug="true">
     <appender name="Logfire" class="com.logfire.logback.LogfireAppender">
         <appName>Logfire Maven example app</appName>
-        <sourceToken><!-- YOUR SOURCE TOKEN --></sourceToken>
+        <sourceToken>bc252ec75e414d4b834114f54935ce45</sourceToken>
         <mdcFields>requestId,requestTime</mdcFields>
         <mdcTypes>string,int</mdcTypes>
         <objectMapperModule>com.fasterxml.jackson.datatype.jsr310.JavaTimeModule</objectMapperModule>
