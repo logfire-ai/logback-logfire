@@ -15,12 +15,12 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Logback Java appender for sending logs to Logfire.ai</description>
-    <url>https://github.com/logfire/logback-logfire/</url>
+    <url>https://github.com/logfire-ai/logback-logfire/</url>
 
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
         </license>
     </licenses>
 
@@ -34,9 +34,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/logfire/logback-logfire.git</connection>
-        <developerConnection>scm:git:https://github.com/logfire/logback-logfire.git</developerConnection>
-        <url>https://github.com/logfire/logback-logfire</url>
+        <connection>scm:git:https://github.com/logfire-ai/logback-logfire.git</connection>
+        <developerConnection>scm:git:https://github.com/logfire-ai/logback-logfire.git</developerConnection>
+        <url>https://github.com/logfire-ai/logback-logfire</url>
         <tag>HEAD</tag>
     </scm>
 
