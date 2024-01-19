@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="Logfire" class="com.logfire.logback.LogfireAppender">
+        <encoder>
+            <pattern>[%thread] %msg%n</pattern>
+        </encoder>
+        <appName>LogfireTest</appName>
+        <sourceToken></sourceToken>
+        <mdcFields>requestId,requestTime</mdcFields>
+        <mdcTypes>string,int</mdcTypes>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="Logfire" />
+    </root>
+
+</configuration>

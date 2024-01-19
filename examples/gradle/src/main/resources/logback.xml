@@ -1,0 +1,20 @@
+<configuration debug="true">
+    <appender name="Logfire" class="com.logfire.logback.LogfireAppender">
+        <appName>Logfire Gradle example app</appName>
+        <sourceToken><!-- YOUR SOURCE TOKEN --></sourceToken>
+        <mdcFields>requestId,requestTime</mdcFields>
+        <mdcTypes>string,int</mdcTypes>
+        <objectMapperModule>com.fasterxml.jackson.datatype.jsr310.JavaTimeModule</objectMapperModule>
+    </appender>
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="Logfire" />
+        <appender-ref ref="Console" />
+    </root>
+</configuration>

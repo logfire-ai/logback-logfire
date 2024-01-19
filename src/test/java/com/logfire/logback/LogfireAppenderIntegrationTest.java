@@ -1,0 +1,154 @@
+package com.logfire.logback;
+
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
+import java.util.UUID;
+import java.io.IOException;
+
+import static org.junit.Assert.*;
+
+/**
+ * ! LOGFIRE_SOURCE_TOKEN must be set as an environment variable before launching the test !
+ *
+ *
+ * @author tomas@logfire.ai
+ */
+public class LogfireAppenderIntegrationTest {
+
+    private Logger logger = (Logger) LoggerFactory.getLogger(LogfireAppenderIntegrationTest.class);
+
+    private LogfireAppenderDecorator appender;
+
+    @Before
+    public void init() throws JoranException {
+        LoggerContext loggerContext = ((LoggerContext) LoggerFactory.getILoggerFactory());
+        loggerContext.reset();
+
+        JoranConfigurator configurator = new JoranConfigurator();
+        configurator.setContext(loggerContext);
+        configurator.doConfigure("src/test/resources/logback.xml");
+
+        this.appender = new LogfireAppenderDecorator();
+        this.appender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
+        this.appender.setSourceToken(System.getenv("LOGFIRE_SOURCE_TOKEN"));
+        this.appender.start();
+
+        this.logger.addAppender(appender);
+    }
+
+    @After
+    public void tearDown() {
+        this.logger.detachAppender(appender);
+    }
+
+    @Test
+    public void testInfoLog() {
+        MDC.put("requestId", "testInfoLog");
+        MDC.put("requestTime", "123");
+        this.logger.info("I am Groot");
+        this.appender.flush();
+    }
+
+    @Test
+    public void testJsonLog() {
+        MDC.put("requestId", "testJsonLog");
+        MDC.put("requestTime", "456");
+        this.logger.info("I am { \"name\": \"Groot\", \"id\": \"GROOT\" }");
+        this.appender.flush();
+    }
+
+    @Test
+    public void testWarnLog() {
+        MDC.put("requestId", "testWarnLog");
+        MDC.put("requestTime", "666");
+        this.logger.warn("I AM groot");
+        this.appender.flush();
+        
+    }
+
+    @Test
+    public void testErrorLog() {
+        MDC.put("requestId", "testErrorLog");
+        MDC.put("requestTime", "789");
+        this.logger.error("I am Groot?", new RuntimeException("GROOT!"));
+        this.appender.flush();
+    }
+
+    @Test
+    public void testBatchDefaultBatchSize() throws InterruptedException {
+        // This is to easily identify and diagnose messages coming from the same test run
+        String batchRunId = UUID.randomUUID().toString().toLowerCase().replace("-", "");
+
+        for (int i = 0; i < 500; i++) {
+            MDC.put("requestId", "testErrorLog");
+            MDC.put("requestTime", i + "");
+            this.logger.info(batchRunId + " Batch Groot " + i);
+            
+        }
+        for (int i = 0; i < 499; i++) {
+            MDC.put("requestId", "testErrorLog");
+            MDC.put("requestTime", (500 + i) + "");
+            this.logger.info(batchRunId + " Batch Groot " + (500 + i));
+            
+        }
+        MDC.put("requestId", "testErrorLog");
+        MDC.put("requestTime", 999 + "");
+        this.logger.info(batchRunId + " Final Batch Groot ");
+
+        // Wait for async flush to be called
+        Thread.sleep(10);
+
+        appender.awaitFlushCompletion();
+    }
+
+    @Test
+    public void testBatchInterval() throws InterruptedException {
+        this.appender.setBatchInterval(500);
+
+        MDC.put("requestId", "testBatchIntervalLog");
+        MDC.put("requestTime", "456");
+        this.logger.info("Single Batch Groot");
+        
+
+        Thread.sleep(50);
+        
+
+        Thread.sleep(500);
+        
+
+        appender.awaitFlushCompletion();
+    }
+
+    @Test
+    public void testConnectTimeout() {
+        this.appender.connectTimeout = 1;
+        this.logger.error("I am no Groot");
+        this.appender.flush();
+    }
+
+    @Test
+    public void testReadTimeout() {
+        this.appender.readTimeout = 1;
+        this.logger.error("I am no Groot");
+        this.appender.flush();
+    }
+
+    private void isOk() {
+        if (!appender.isOK() && appender.hasError()) {
+            System.out.println(appender.getResponse().getStatus() + " - " + appender.getResponse().getError());
+        }
+        if (!appender.isOK() && appender.hasException()) {
+            appender.getException().printStackTrace();
+        }
+        assertTrue(appender.isOK());
+    }
+
+}
