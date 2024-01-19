@@ -6,7 +6,7 @@
             <pattern>[%thread] %msg%n</pattern>
         </encoder>
         <appName>LogfireTest</appName>
-        <sourceToken></sourceToken>
+        <sourceToken>${LOGFIRE_SOURCE_TOKEN}</sourceToken>
         <mdcFields>requestId,requestTime</mdcFields>
         <mdcTypes>string,int</mdcTypes>
     </appender>
