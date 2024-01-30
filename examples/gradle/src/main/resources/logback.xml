@@ -1,7 +1,7 @@
 <configuration debug="true">
-    <appender name="Logfire" class="com.logfire.logback.LogfireAppender">
+    <appender name="Logfire" class="ai.logfire.logback.LogfireAppender">
         <appName>Logfire Gradle example app</appName>
-        <sourceToken><!-- YOUR SOURCE TOKEN --></sourceToken>
+        <sourceToken><!--Paste your source token here--></sourceToken>
         <mdcFields>requestId,requestTime</mdcFields>
         <mdcTypes>string,int</mdcTypes>
         <objectMapperModule>com.fasterxml.jackson.datatype.jsr310.JavaTimeModule</objectMapperModule>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <appender name="Logfire" class="com.logfire.logback.LogfireAppender">
+    <appender name="Logfire" class="ai.logfire.logback.LogfireAppender">
         <encoder>
             <pattern>[%thread] %msg%n</pattern>
         </encoder>
